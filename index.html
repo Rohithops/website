@@ -6,107 +6,105 @@
     <title>Professional Online Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            color: #fff;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Background Image with Blur Effect */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvZGV8ZW58MHx8MHx8fDA%3D') no-repeat center center/cover;
-            filter: blur(5px);
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(30, 30, 30, 0.9);
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            display: block; /* Changed from 'none' to 'block' */
-        }
-        input, select, button {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-        }
-        input, select {
-            background: #333;
-            color: white;
-        }
-        button {
-            background: #007BFF;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        a {
-            color: #FFD700;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { color: #fff; text-align: center; background: #222; }
+        .container { max-width: 400px; margin: 50px auto; padding: 20px; background: rgba(30, 30, 30, 0.9); border-radius: 10px; display: none; }
+        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 5px; font-size: 16px; }
+        button { cursor: pointer; }
+        .btn-primary { background: #007BFF; color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-success:hover { background: #218838; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
     </style>
 </head>
 <body>
 
+    <!-- Registration Page -->
     <div id="register" class="container">
         <h2>Register</h2>
-        <input type="text" id="name" placeholder="Name">
-        <select id="department">
+        <input type="text" id="reg_name" placeholder="Name">
+        <select id="reg_department">
             <option value="" disabled selected>Select Department</option>
-            <option value="CSE">Computer Science & Engineering</option>
-            <option value="ECE">Electronics & Communication Engineering</option>
-            <option value="EEE">Electrical & Electronics Engineering</option>
-            <option value="MECH">Mechanical Engineering</option>
-            <option value="CIVIL">Civil Engineering</option>
+            <option value="CSE">CSE</option>
+            <option value="ECE">ECE</option>
+            <option value="EEE">EEE</option>
+            <option value="MECH">MECH</option>
+            <option value="CIVIL">CIVIL</option>
         </select>
-        <select id="year">
+        <select id="reg_year">
             <option value="" disabled selected>Select Year</option>
             <option value="1st">1st Year</option>
             <option value="2nd">2nd Year</option>
             <option value="3rd">3rd Year</option>
             <option value="4th">4th Year</option>
         </select>
-        <input type="text" id="section" placeholder="Section">
-        <input type="password" id="password" placeholder="Password">
-        <input type="password" id="confirm_password" placeholder="Confirm Password">
-        <button onclick="register()">Register</button>
+        <input type="text" id="reg_section" placeholder="Section">
+        <input type="password" id="reg_password" placeholder="Password">
+        <input type="password" id="reg_confirm_password" placeholder="Confirm Password">
+        <button class="btn-primary" onclick="register()">Register</button>
+        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login" class="container">
+        <h2>Login</h2>
+        <input type="text" id="login_name" placeholder="Enter Name">
+        <input type="password" id="login_password" placeholder="Enter Password">
+        <button class="btn-success" onclick="login()">Login</button>
+        <p>New user? <a href="#" onclick="showRegister()">Register</a></p>
+    </div>
+
+    <!-- Home Page -->
+    <div id="home" class="container">
+        <h2>Welcome, <span id="home_username"></span>!</h2>
+        <p>Department: <span id="home_department"></span></p>
+        <p>Year: <span id="home_year"></span></p>
+        <p>Section: <span id="home_section"></span></p>
+        <button class="btn-danger" onclick="logout()">Logout</button>
     </div>
 
     <script>
+        // Function to show Register Page
+        function showRegister() {
+            document.getElementById("register").style.display = "block";
+            document.getElementById("login").style.display = "none";
+            document.getElementById("home").style.display = "none";
+        }
+
+        // Function to show Login Page
+        function showLogin() {
+            document.getElementById("register").style.display = "none";
+            document.getElementById("login").style.display = "block";
+            document.getElementById("home").style.display = "none";
+        }
+
+        // Function to show Home Page
+        function showHome() {
+            let user = JSON.parse(localStorage.getItem("current_user"));
+            if (!user) {
+                alert("Please login first!");
+                showLogin();
+                return;
+            }
+            document.getElementById("home_username").textContent = user.name;
+            document.getElementById("home_department").textContent = user.department;
+            document.getElementById("home_year").textContent = user.year;
+            document.getElementById("home_section").textContent = user.section;
+            document.getElementById("register").style.display = "none";
+            document.getElementById("login").style.display = "none";
+            document.getElementById("home").style.display = "block";
+        }
+
+        // Function to Register User
         function register() {
-            let name = document.getElementById('name').value.trim();
-            let department = document.getElementById('department').value;
-            let year = document.getElementById('year').value;
-            let section = document.getElementById('section').value.trim();
-            let password = document.getElementById('password').value;
-            let confirmPassword = document.getElementById('confirm_password').value;
+            let name = document.getElementById('reg_name').value.trim();
+            let department = document.getElementById('reg_department').value;
+            let year = document.getElementById('reg_year').value;
+            let section = document.getElementById('reg_section').value.trim();
+            let password = document.getElementById('reg_password').value;
+            let confirmPassword = document.getElementById('reg_confirm_password').value;
 
             if (!name || !department || !year || !section || !password) {
                 alert('All fields are required!');
@@ -117,22 +115,51 @@
                 return;
             }
 
-            // Check if localStorage already has data
+            let storedData = localStorage.getItem("user_data");
+            let userData = storedData ? JSON.parse(storedData) : [];
+            userData.push({ name, department, year, section, password });
+            localStorage.setItem("user_data", JSON.stringify(userData));
+
+            alert('Registration Successful! Redirecting to Login Page...');
+            showLogin();
+        }
+
+        // Function to Login User
+        function login() {
+            let name = document.getElementById('login_name').value.trim();
+            let password = document.getElementById('login_password').value;
+
             let storedData = localStorage.getItem("user_data");
             let userData = storedData ? JSON.parse(storedData) : [];
 
-            // Append new user data
-            userData.push([name, department, year, section, password]);
-            localStorage.setItem("user_data", JSON.stringify(userData));
+            let user = userData.find(user => user.name === name && user.password === password);
 
-            // Create Excel file
-            let wb = XLSX.utils.book_new();
-            let ws = XLSX.utils.aoa_to_sheet([["Name", "Department", "Year", "Section", "Password"], ...userData]);
-            XLSX.utils.book_append_sheet(wb, ws, "Users");
-            XLSX.writeFile(wb, "user_data.xlsx");
-
-            alert('Registration Successful! Data saved to Excel.');
+            if (user) {
+                localStorage.setItem("current_user", JSON.stringify(user));
+                alert('Login Successful! Redirecting to Home Page...');
+                showHome();
+            } else {
+                alert('Invalid Credentials!');
+            }
         }
+
+        // Function to Logout
+        function logout() {
+            localStorage.removeItem("current_user");
+            alert("Logged out successfully!");
+            showLogin();
+        }
+
+        // Auto-show correct page on load
+        window.onload = function () {
+            let currentUser = localStorage.getItem("current_user");
+            if (currentUser) {
+                showHome();
+            } else {
+                showRegister();
+            }
+        };
     </script>
+
 </body>
 </html>
