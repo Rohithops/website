@@ -6,105 +6,137 @@
     <title>Professional Online Portal</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { color: #fff; text-align: center; background: #222; }
-        .container { max-width: 400px; margin: 50px auto; padding: 20px; background: rgba(30, 30, 30, 0.9); border-radius: 10px; display: none; }
-        input, select, button { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 5px; font-size: 16px; }
-        button { cursor: pointer; }
-        .btn-primary { background: #007BFF; color: white; }
-        .btn-primary:hover { background: #0056b3; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-success:hover { background: #218838; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-danger:hover { background: #c82333; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Background Image with Blur Effect */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvZGV8ZW58MHx8MHx8fDA%3D') no-repeat center center/cover;
+            filter: blur(5px); /* Adjust or remove for no blur */
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+        input, select {
+            background: #333;
+            color: white;
+        }
+        button {
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        a {
+            color: #FFD700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Registration Page -->
     <div id="register" class="container">
         <h2>Register</h2>
-        <input type="text" id="reg_name" placeholder="Name">
-        <select id="reg_department">
+        <input type="text" id="name" placeholder="Name" required>
+        <select id="department" required>
             <option value="" disabled selected>Select Department</option>
-            <option value="CSE">CSE</option>
-            <option value="ECE">ECE</option>
-            <option value="EEE">EEE</option>
-            <option value="MECH">MECH</option>
-            <option value="CIVIL">CIVIL</option>
+            <option value="CSE">Computer Science & Engineering</option>
+            <option value="ECE">Electronics & Communication Engineering</option>
+            <option value="EEE">Electrical & Electronics Engineering</option>
+            <option value="MECH">Mechanical Engineering</option>
+            <option value="CIVIL">Civil Engineering</option>
         </select>
-        <select id="reg_year">
+        <select id="year" required>
             <option value="" disabled selected>Select Year</option>
             <option value="1st">1st Year</option>
             <option value="2nd">2nd Year</option>
             <option value="3rd">3rd Year</option>
             <option value="4th">4th Year</option>
         </select>
-        <input type="text" id="reg_section" placeholder="Section">
-        <input type="password" id="reg_password" placeholder="Password">
-        <input type="password" id="reg_confirm_password" placeholder="Confirm Password">
-        <button class="btn-primary" onclick="register()">Register</button>
-        <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+        <input type="text" id="section" placeholder="Section" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="password" id="confirm_password" placeholder="Confirm Password" required>
+        <button onclick="register()">Register</button>
     </div>
 
-    <!-- Login Page -->
     <div id="login" class="container">
         <h2>Login</h2>
-        <input type="text" id="login_name" placeholder="Enter Name">
-        <input type="password" id="login_password" placeholder="Enter Password">
-        <button class="btn-success" onclick="login()">Login</button>
-        <p>New user? <a href="#" onclick="showRegister()">Register</a></p>
+        <input type="text" id="login_username" placeholder="Name" required>
+        <input type="password" id="login_password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
     </div>
 
-    <!-- Home Page -->
     <div id="home" class="container">
-        <h2>Welcome, <span id="home_username"></span>!</h2>
-        <p>Department: <span id="home_department"></span></p>
-        <p>Year: <span id="home_year"></span></p>
-        <p>Section: <span id="home_section"></span></p>
-        <button class="btn-danger" onclick="logout()">Logout</button>
+        <h2>Welcome to My Website</h2>
+        <p>Name: Vagu Rohith Prasad</p>
+        <p>Email: vagurohithws@gmail.com</p>
+        <p>Branch: CSE Core</p>
+        <p>Year: 2nd Year</p>
+        <a href="https://drive.google.com/file/d/1EjaPhoxAnSdmvT4vK11GCMS3IO03Lq74/view?usp=sharing" target="_blank" >View Resume</a>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <div id="thankyou" class="container">
+        <h2>Thank You for Visiting Our Website</h2>
+        <p>We appreciate your time!</p>
     </div>
 
     <script>
-        // Function to show Register Page
-        function showRegister() {
-            document.getElementById("register").style.display = "block";
-            document.getElementById("login").style.display = "none";
-            document.getElementById("home").style.display = "none";
+        let users = [];
+        let currentUser = null;
+
+        function showPage(page) {
+            document.querySelectorAll('.container').forEach(div => div.style.display = 'none');
+            document.getElementById(page).style.display = 'block';
         }
 
-        // Function to show Login Page
-        function showLogin() {
-            document.getElementById("register").style.display = "none";
-            document.getElementById("login").style.display = "block";
-            document.getElementById("home").style.display = "none";
-        }
-
-        // Function to show Home Page
-        function showHome() {
-            let user = JSON.parse(localStorage.getItem("current_user"));
-            if (!user) {
-                alert("Please login first!");
-                showLogin();
-                return;
-            }
-            document.getElementById("home_username").textContent = user.name;
-            document.getElementById("home_department").textContent = user.department;
-            document.getElementById("home_year").textContent = user.year;
-            document.getElementById("home_section").textContent = user.section;
-            document.getElementById("register").style.display = "none";
-            document.getElementById("login").style.display = "none";
-            document.getElementById("home").style.display = "block";
-        }
-
-        // Function to Register User
         function register() {
-            let name = document.getElementById('reg_name').value.trim();
-            let department = document.getElementById('reg_department').value;
-            let year = document.getElementById('reg_year').value;
-            let section = document.getElementById('reg_section').value.trim();
-            let password = document.getElementById('reg_password').value;
-            let confirmPassword = document.getElementById('reg_confirm_password').value;
+            let name = document.getElementById('name').value.trim();
+            let department = document.getElementById('department').value;
+            let year = document.getElementById('year').value;
+            let section = document.getElementById('section').value.trim();
+            let password = document.getElementById('password').value;
+            let confirmPassword = document.getElementById('confirm_password').value;
 
             if (!name || !department || !year || !section || !password) {
                 alert('All fields are required!');
@@ -115,50 +147,34 @@
                 return;
             }
 
-            let storedData = localStorage.getItem("user_data");
-            let userData = storedData ? JSON.parse(storedData) : [];
-            userData.push({ name, department, year, section, password });
-            localStorage.setItem("user_data", JSON.stringify(userData));
-
-            alert('Registration Successful! Redirecting to Login Page...');
-            showLogin();
+            users.push({ Name: name, Password: password });
+            alert('Registration Successful! Redirecting to Login...');
+            showPage('login');
         }
 
-        // Function to Login User
         function login() {
-            let name = document.getElementById('login_name').value.trim();
+            let username = document.getElementById('login_username').value.trim();
             let password = document.getElementById('login_password').value;
 
-            let storedData = localStorage.getItem("user_data");
-            let userData = storedData ? JSON.parse(storedData) : [];
-
-            let user = userData.find(user => user.name === name && user.password === password);
-
+            let user = users.find(user => user.Name === username && user.Password === password);
+            
             if (user) {
-                localStorage.setItem("current_user", JSON.stringify(user));
-                alert('Login Successful! Redirecting to Home Page...');
-                showHome();
+                currentUser = user;
+                alert('Login Successful! Redirecting to Home...');
+                showPage('home');
             } else {
-                alert('Invalid Credentials!');
+                alert('Invalid Credentials! Redirecting back to Register...');
+                showPage('register');
             }
         }
 
-        // Function to Logout
         function logout() {
-            localStorage.removeItem("current_user");
-            alert("Logged out successfully!");
-            showLogin();
+            currentUser = null;
+            alert('Logging out...');
+            showPage('thankyou');
         }
 
-        // Auto-show correct page on load
-        window.onload = function () {
-            let currentUser = localStorage.getItem("current_user");
-            if (currentUser) {
-                showHome();
-            } else {
-                showRegister();
-            }
-        };
+        showPage('register');
     </script>
 
 </body>
